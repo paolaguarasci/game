@@ -1,29 +1,8 @@
-"""
-  GOAL 
-  - selezionare gli utenti che eseguiranno il tour
-  - deve definire i luoghi che verranno visitati dal tour
-  - deve definire i pagamenti che vengono addebitati agli utenti
-
-  VINCOLI
-  - A nessun utente deve essere addebitato un costo maggiore rispetto
-    a quello che e' disposto a pagare (max)
-
-  NICE TO HAVE
-  - il costo del tour, che e' proporzionale alla lunghezza in km, 
-    deve essere equamente distribuito tra gli utenti del veicolo, 
-    in modo che nessun agente abbia argomenti per opporsi.
-  - il costo fisso deve essere ripartito tra gli agenti in base 
-    alle utilita' dichiarate, e attuando meccanismi che portino a 
-    dichiarare in modo veritiero le utilita'.
-"""
-
 from importlib.resources import path
 from random import randrange
 import networkx as nx
 import matplotlib.pyplot as plt
 from networkx.algorithms import approximation as approx
-
-# https://networkx.org/documentation/latest/reference/algorithms/shortest_paths.html
 
 G = nx.DiGraph()
 
@@ -101,6 +80,7 @@ for user in users:
             location.discard(u[0])
           
         
+printGraph(G)
 
 print(travellers)
 print(location)
@@ -111,5 +91,4 @@ print("Num Viaggiatori: ", len(travellers))
 print("Costo viaggio: ", totalCost)
 print("Costo viaggio pro capite: ", totalCost / len(travellers))
 
-printGraph(G)
 printGraph(nx.subgraph(G, location))
