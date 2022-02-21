@@ -4,7 +4,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from networkx.algorithms import approximation as approx
 
-G = nx.DiGraph()
+G = nx.Graph()
 
 G.add_weighted_edges_from({
     (1, 2, 3),    (1, 3, 17),   (1, 4, 14),   (1, 5, 11),   (1, 6, 8),
