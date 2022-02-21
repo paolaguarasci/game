@@ -66,7 +66,7 @@
 
 \section*{Descrizione}
 \paragraph*{Scenario iniziale}
-Il problema riguarda la selezione di un sottoinsieme di utenti all'interno di un piu' ampio gruppo di utenti che dovranno effettuare un tour tra alcune citta'. Inoltre bisonga stabilire il costo da addebitare a ciascun utente.
+Il problema riguarda la selezione di un sottoinsieme di utenti all'interno di un più ampio gruppo di utenti che dovranno effettuare un tour tra alcune città. Inoltre bisogna stabilire il costo da addebitare a ciascun utente.
 \paragraph*{Input}
 L'algoritmo in ingresso si aspetta una lista di tipi, uno per ogni utente. Il tipo rappresenta la località preferita di ogni agente. È stata introdotta una semplificazione riguardo al problema posto originariamente: gli agenti non forniscono una lista di preferenze bensì una sola preferenza di cui ci si può fidare poiché è stato adottato un meccanismo di scelta basato sul mento massimo che ogni agente è disposto a effettuare. Quindi, poiché dell'affermazione sul pagamento ci si può fidare, allora si è deciso di usare questo criterio come discriminante per quanto riguarda l'inserimento del singolo agente nel sottoinsieme travellers, cioè l'insieme dei viaggiatori.
 In fase di test dell'algoritmo l'input è stato generato casualmente, rispettando i limiti di cardinalità dell'insieme delle località (nessun agente può preferire una località che non esiste).
@@ -75,9 +75,9 @@ Le località sono rappresentate da un grafo pesato non orientato. Ogni località
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.50\textwidth]{img/graphTot.png}
-  \caption{Grafico generale delle localita'}\label{fig:graphTot.png}
+  \caption{Grafico generale delle località}\label{fig:graphTot.png}
 \end{figure}
-Il calcolo del percorso ottimale e del suo costo è stato modellato usando l'algoritmo di Dijkstra e risolvendo il problema del Commesso Viaggiatore. Per far ciò ci siamo avvalsi di una ottima libreria in Python per la manipolazione di grafi\footnote{NetworkX, rilasiciata con licenza BSD (Open Source) \url{https://networkx.org/}}. La funzione di libreria \verb|approx.greedy_tsp(graph)| prende in input un grafo (o porzione di esso) e ne calcola il cammino hemiltoniano.
+Il calcolo del percorso ottimale e del suo costo è stato modellato usando l'algoritmo di Dijkstra e risolvendo il problema del Commesso Viaggiatore. Per far ciò ci siamo avvalsi di una ottima libreria in Python per la manipolazione di grafi\footnote{NetworkX, rilasciata con licenza BSD (Open Source) \url{https://networkx.org/}}. La funzione di libreria \verb|approx.greedy_tsp(graph)| prende in input un grafo (o porzione di esso) e ne calcola il cammino hemiltoniano.
 Per avere il costo del cammino la formula usata è la seguente:
 \begin{lstlisting}[language=Python]
 cost = sum(graph[n][nbr]["weight"] for n, nbr in nx.utils.pairwise(cycle))
@@ -94,7 +94,7 @@ Il core del progetto è l'algoritmo di selezione degli agenti. Per ogni agente s
   \item Se il costo è accettabile e non si superano i vincoli in termini di chilometri massimi, allora inserisci l'agente nel gruppo viaggiatori e la nuova località nel gruppo di località selezionate.
   \item Infine, per ogni utente già inserito nel gruppo viaggiatori valuta se il nuovo costo del viaggio è accettabile e se non dovesse esserlo elimina l'agente dal gruppo viaggiatori. Elimina anche la località scelta se non è preferita da nessun agente rimasto nel gruppo viaggiatori.
 \end{itemize}
-E' un meccanismo diretto la cui modalità di selezione di ogni singolo viaggiatore consente di essere sicuri riguardo l'applicazione di strategie dominanti da parte dei vari agenti, poiché non avviene tramite utilità, che per definizione (vedi traccia) non è affidabile, ma avviene in base al pagamento che ogni agente è disposto a fare (considerato affidabile).
+È un meccanismo diretto la cui modalità di selezione di ogni singolo viaggiatore consente di essere sicuri riguardo l'applicazione di strategie dominanti da parte dei vari agenti, poiché non avviene tramite utilità, che per definizione (vedi traccia) non è affidabile, ma avviene in base al pagamento che ogni agente è disposto a fare (considerato affidabile).
 Il costo fisso per ogni agente è calcolato dividendo la somma per la cardinalità dell' insieme \verb|travellers|.
 \paragraph*{Esempio di output}
 Ecco un esempio di output: la prima riga sono gli utenti selezionati, la seconda riga sono le località selezionate, poi costo di viaggio totale e costo di viaggio pro capite.
@@ -109,7 +109,7 @@ Costo viaggio pro capite:  9.0
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.50\textwidth]{img/graphOutput.png}
-  \caption{Sottografo con localita' selezionate per il tour}\label{fig:graphOutput.png}
+  \caption{Sotto grafo con località selezionate per il tour}\label{fig:graphOutput.png}
 \end{figure}
 \clearpage
 \pagebreak
