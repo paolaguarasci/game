@@ -61,43 +61,43 @@
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%
-%%%  Prima parte  %%%%
+%%%  First part  %%%%
 %%%%%%%%%%%%%%%%%%%%%%
 
 \section*{Description}
 \paragraph*{Initial scenario}
 The problem concerns the selection of a subset of users within a larger group of users who will have to tour between certain cities. Furthermore, it is necessary to establish the cost to be charged to each user.
 \paragraph*{Input}
-The input algorithm expects a list of types, one for each user. The type represents each agent's preferred location. A simplification has been introduced regarding the problem originally posed: agents do not provide a list of preferences but a single preference that can be trusted since a choice mechanism based on the maximum payment that each agent is willing to make has been adopted. Therefore, since the payment affirmation can be trusted, it was then decided to use this criterion as a discriminant as regards the inclusion of the single agent in the traveler subset, that is, the set of travelers.
+The input algorithm expects a list of types, one for each user. The type represents each agent's preferred location. A simplification has been introduced regarding the problem originally posed: agents do not provide a list of preferences but a single preference that can be trusted, since a choice mechanism based on the maximum payment that each agent is willing to make has been adopted. Therefore, since the payment affirmation can be trusted, it was then decided to use this criterion as a discriminant as regards the inclusion of the single agent in the traveller subset, that is, the set of travellers.
 In the algorithm testing phase, the input was generated randomly, respecting the cardinality limits of the set of locations (no agent can prefer a location that does not exist).
 \paragraph*{Graph}
-Locations are represented by an undirected weighted graph. Each locality, that is, each node, is connected with all the other localities. The weights on the arches indicate the distance in kilometers between the two nodes at the ends of each arch.
+Locations are represented by an undirected weighted graph. Each locality, that is, each node, is connected with all the other localities. The weights on the arches indicate the distance in kilometres between the two nodes at the ends of each arch.
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.50\textwidth]{img/graphTot.png}
   \caption{General graph of the localities}\label{fig:graphTot.png}
 \end{figure}
-The calculation of the optimal route and its cost was modeled using Dijkstra's algorithm and solving the Traveling Salesman problem. To do this we used an excellent Python library for graph manipulation\footnote{NetworkX, released under BSD license (Open Source) \url{https://networkx.org/}}. The library function \verb|approx.greedy_tsp(graph)| it takes a graph (or portion of it) as input and calculates its Hemiltonian path.
+The calculation of the optimal route and its cost was modelled using Dijkstra's algorithm and solving the Travelling Salesman problem. To do this, we used an excellent Python library for graph manipulation\footnote{NetworkX, released under BSD licence (Open Source) \url{https://networkx.org/}}. The library function \verb|approx.greedy_tsp(graph)| it takes a graph (or portion of it) as input and calculates its Hamiltonian path.
 To get the cost of the travel, the formula used is the following:
 \begin{lstlisting}[language=Python]
 cost = sum(graph[n][nbr]["weight"] for n, nbr in nx.utils.pairwise(cycle))
 \end{lstlisting}
-The graph is modeled as a list of edge tuples with three values: starting node, ending node, weight.
+The graph is modelled as a list of edge tuples with three values: starting node, ending node, weight.
 The nodes are inferred from the list of edges.
 \paragraph*{Output}
-On output you get a list of travelers and a list of selected locations.
+On output, you get a list of travellers and a list of selected locations.
 \paragraph*{Mechanism}
-The core of the project is the agent selection algorithm. For each agent, the possibility of inclusion in the group of travelers, the \ verb | travelers |, is evaluated using the following selection strategy:
+The core of the project is the agent selection algorithm. For each agent, the possibility of inclusion in the group of travellers, the \verb|travellers|, is evaluated using the following selection strategy:
 \begin{itemize}
   \item If the maximum capacity of the machine has been reached, do nothing.
-  \item Otherwise, evaluate the cost of travel between the locations already selected and the new one preferred by the agent.
-  \item If the cost is acceptable and the constraints in terms of maximum kilometers are not exceeded, then enter the agent in the traveler group and the new location in the selected location group.
-  \item Finally, for each user already included in the travelers group, it evaluates whether the new cost of the trip is acceptable and if it should not be, it eliminates the agent from the travelers group. Also delete the chosen location if it is not preferred by any agent remaining in the traveler group.
+  \item Otherwise, evaluate the cost of travel between the locations already selected, and the new one preferred by the agent.
+  \item If the cost is acceptable and the constraints in terms of maximum kilometres are not exceeded, then enter the agent in the traveller group and the new location in the selected location group.
+  \item Finally, for each user already included in the traveller's group, it evaluates whether the new cost of the trip is acceptable and if it should not be, it eliminates the agent from the traveller's group. Also delete the chosen location if it is not preferred by any agent remaining in the traveller group.
 \end{itemize}
-It is a direct mechanism whose method of selecting each individual traveler allows you to be sure about the application of dominant strategies by the various agents, since it does not take place through utilities, which by definition (see trace) is not reliable, but occurs in based on the payment that each agent is willing to make (considered reliable).
+It is a direct mechanism whose method of selecting each individual traveller allows you to be sure about the application of dominant strategies by the various agents, since it does not take place through utilities, which by definition (see trace) is not reliable, but occurs in based on the payment that each agent is willing to make (considered reliable).
 The fixed cost for each agent is calculated by dividing the sum by the cardinality of the set \verb|travellers|.
 \paragraph*{Example of output}
-Here is an example output: the first line is the selected users, the second line is the selected locations, then the total travel cost and per capita travel cost.
+Here is an example output: the first line is the selected users, the second line is the selected locations, then the total travel cost and pro capite travel cost.
 \begin{lstlisting}[language=bash]
 $ python src/agt.py
 Travellers:  {(2, 98, 13), (5, 93, 24), (4, 51, 23), (2, 10, 21), (1, 84, 24)}
@@ -116,7 +116,7 @@ Travel cost for each user:  12.8
 \pagebreak
 
 %%%%%%%%%%%%%%%%%%%%%%
-%%% Seconda parte %%%%
+%%% Second part %%%%
 %%%%%%%%%%%%%%%%%%%%%%
 
 \section*{Implementation}
