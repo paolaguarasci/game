@@ -50,8 +50,8 @@ def genUsers(numUsers):
     users.append((loc, util, max))
   return users
 
-def calcoloCostoFisso():
-  pass
+def calculateFixedCost(n, c):
+  return c/n;
 
 users = genUsers(20)
 maxUsersInCar = 5
@@ -59,36 +59,36 @@ lenMax = 100
 fixCost = 10
 kmCost = 1.5 
 
-location = set()
+locations = set()
 travellers = set()
 
 for user in users:
   if len(travellers) < maxUsersInCar:
-    tmpLocation = location.copy()
+    tmpLocation = locations.copy()
     tmpLocation.add(user[0])
     subg = nx.subgraph(G, tmpLocation)
     lenKm = findPath(subg)
-    travelCost = float(lenKm * kmCost) / (len(travellers) + 1)
+    travelCost = float(lenKm * kmCost) / (len(travellers) + 1) + calculateFixedCost(len(travellers) + 1, fixCost)
     if (lenKm <= lenMax) and travelCost < user[2]:
-      location.add(user[0])
+      locations.add(user[0])
       travellers.add(user)
       for u in users:
         if u[2] < travelCost:
           travellers.discard(u)
           o = [user for user in travellers if user[0] == u[0]]
           if len(o) == 0:
-            location.discard(u[0])
+            locations.discard(u[0])
           
         
 printGraph(G)
 
-print(travellers)
-print(location)
+print("Travellers: ", travellers)
+print("Locations: ", locations)
 
-totalCost = findPath(nx.subgraph(G, location)) * kmCost
+totalCost = findPath(nx.subgraph(G, locations)) * kmCost
 
-print("Num Viaggiatori: ", len(travellers))
-print("Costo viaggio: ", totalCost)
-print("Costo viaggio pro capite: ", totalCost / len(travellers))
+print("Num Travellers: ", len(travellers))
+print("Travel cost: ", totalCost)
+print("Travel cost for each user: ", totalCost / len(travellers) + calculateFixedCost(len(travellers), fixCost))
 
-printGraph(nx.subgraph(G, location))
+printGraph(nx.subgraph(G, locations))
