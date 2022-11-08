@@ -28,3 +28,9 @@
 
 - Il costo del tour, che è proporzionale alla lunghezza in km, deve essere equamente distribuito tra gli utenti del veicolo, in modo che nessun agente abbia argomenti per opporsi.
 - Il costo fisso deve essere distribuito tra gli agenti in base alle utilità dichiarate, e implementando un meccanismo che porti a dichiarare in modo veritiero le utilità.
+
+
+- vcg 
+- groove 
+
+formalizzare
