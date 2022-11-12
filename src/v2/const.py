@@ -2,6 +2,9 @@ MAXUSERFORTOUR = 3
 MAXKMFORTOUR = 10
 FIXEDTOURCOST = 5
 
+STARTPLACE = 'rome'
+ENDPLACE = STARTPLACE
+
 PLACES = ["rome", "paris", "vienna", "london",
           "brussels", "berlin", "amsterdam"]
           
