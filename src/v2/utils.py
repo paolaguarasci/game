@@ -1,26 +1,8 @@
 from copy import deepcopy
-from random import randint
 
 
 def sortDictByValues(passedDict):
     return {key: val for key, val in sorted(passedDict.items(), key=lambda ele: ele[1], reverse=True)}
-
-
-def genRandomUtilitiesSorted(places):
-    utilities = [randint(-3, 4) for i in range(len(places), 0, -1)]
-    placesToBeValuate = deepcopy(places)
-    userUtilities = {}
-    for utility in utilities:
-        place = placesToBeValuate[randint(0, len(placesToBeValuate)-1)]
-        placesToBeValuate.remove(place)
-        userUtilities[place] = utility
-    return sortDictByValues(userUtilities)
-
-
-def genRandomMaxPayments():
-    # TODO Aggiunstare questi valori
-    return randint(1, 10)
-
 
 def checkDistancesCoerency(dist):
     distances = deepcopy(dist)

@@ -1,66 +1,100 @@
+import warnings
+from copy import deepcopy
+
 import const
-import graph
-import utils
+from agent import Agent
+from graph import CityNetwork
 
-agents = [{
-    "name": "u1",
-    "utilities": {},
-    "maxPayments": None
-},
-    {
-    "name": "u2",
-    "utilities": {},
-    "maxPayments": None
-},
-    {
-    "name": "u3",
-    "utilities": {},
-    "maxPayments": None
-},
-    {
-    "name": "u4",
-    "utilities": {},
-    "maxPayments": None
-},
-    {
-    "name": "u5",
-    "utilities": {},
-    "maxPayments": None
-}
-]
+warnings.filterwarnings("ignore", message="Gtk-Message")
 
-# Preparazione agenti - generazione random di utilities e pagamento massimo
+nAgents = 10
+agents = []
+postiInMacchina = const.MAXUSERFORTOUR
+
+for i in range(0,nAgents):
+    agents.append(Agent(str(i)))
+
+cityNet = CityNetwork()
+# cityNet.printGraph(cityNet.cityNetwork)
+
+agentsValuation = []
 for agent in agents:
-    agent["utilities"] = utils.genRandomUtilitiesSorted(const.PLACES)
-    agent["maxPayments"] = utils.genRandomMaxPayments()
-    print(agent)
+    l, v = agent.getFirstValuation()
+    agentsValuation.append((l, v, agent.getName()))
+agentsValuation.sort(key=lambda x: (x[0], -x[1]))
+print(agentsValuation)
 
+locations = set()
+for agentValuation in agentsValuation:
+    locations.add(agentValuation[0])
+cycle, cost = cityNet.findShortestPathBetweenAllSelectedLocations(locations)
+cityNet.printGraph(cityNet.cityNetwork, cycle)
 
-# mi serve una funzione che dato un grafo riesca a calcolare il best path in assoluto
-# questa stessa funzione dovrebbe riuscire a calcolare anche il best path di un sottografo (che resta cmq un grafo)
-# ho cosi la differenza tra best path in assoluto e best path senza l'utente i
-# posso costruire il pagamento di conseguenza
+while cost > const.MAXKMFORTOUR:
+    print("WARNING: The tour has to many KM")
+    locations.pop()
+    cycle, cost = cityNet.findShortestPathBetweenAllSelectedLocations(locations)
 
+cityNet.printGraph(cityNet.cityNetwork, cycle)
 
-"""
-### Obiettivo:
-- Il sistema deve:
-    - selezionare gli utenti che eseguiranno il tour
-    - definire i luoghi che saranno visitati dal tour
-    - definire i pagamenti che vengono addebitati agli utenti.
+filteredAgents = []
 
-### Vincolo:
-- A nessun utente può essere addebitato un importo superiore al pagamento massimo che ha dichiarato.
+for place in locations:
+    offers = list(filter(lambda x: x[0] == place, agentsValuation))
+    offers.sort(key=lambda x: x[1])
+    agent = list(filter(lambda x: x.getName() == offers[0][2], agents))
+    filteredAgents.append(agent[0])
 
-### Desiderata:
-- Il costo del tour, che è proporzionale alla lunghezza in km, deve essere equamente distribuito tra gli utenti del veicolo, 
-in modo che nessun agente abbia argomenti per opporsi.
-- Il costo fisso deve essere distribuito tra gli agenti in base alle utilità dichiarate, 
-e implementando un meccanismo che porti a dichiarare in modo veritiero le utilità.
-"""
+print(filteredAgents)
 
-graph.printGraph(graph.G)
-locations = ["rome", "berlin", "vienna", "brussels"]
-cycle = graph.approx.christofides(graph.G, weight="weight")
-subGraph = graph.nx.subgraph(graph.G, cycle)
-graph.printGraph(graph.G, subGraph)
+distances, path = cityNet.findDistanceToNoSelectedLocations(locations)
+totalCostTour = const.FIXEDTOURCOST + (cost * const.KMFIXEDCOST)
+distancesToOtherPlace = dict(filter(lambda val: val[1] > 0, distances.items()))
+
+print("Selected Locations: ", list(locations))
+print("Distance to other places: ", distancesToOtherPlace)
+print("Lenght (KM) of shortest path: ", cost)
+print("Total tour price: ", totalCostTour)
+
+cityNet.printGraph(cityNet.cityNetwork, cycle)
+
+def placesThatMaximizeValuation():
+    places = []
+    return places
+
+def calculateAgentPayment(agent, locations, originalCost):
+    totalTourCost = deepcopy(originalCost)
+    originalLocations = deepcopy(locations)
+    chooseLocation = agent.getFirstValuation()[0]
+    originalLocations.remove(chooseLocation)
+    newCycle, newCost = cityNet.findShortestPathBetweenAllSelectedLocations(originalLocations)
+    payment = ((totalTourCost - newCost) * const.KMFIXEDCOST)
+    # print(agent.getName(), end="\t")
+    # print(chooseLocation, end="\t")
+    # print("payment request: ", payment)
+    # cityNet.printGraph(cityNet.cityNetwork, newCycle)
+    return (payment, chooseLocation)
+
+payments = []
+totalOfPayments = 0
+
+placeVote = dict()
+for place in const.PLACES:
+    placeVote[place] = 0
+
+for agent in filteredAgents:
+    place, valuation = agent.getFirstValuation()
+    placeVote[place] += 1
+
+print(placeVote)
+
+for agent in filteredAgents:
+    payment, chooseLocation = calculateAgentPayment(agent, locations, cost)
+    totalOfPayments += payment
+    payments.append((agent.getName(), payment, chooseLocation))
+
+print(payments)
+print("Total payments:", totalOfPayments, "Total cost: ", totalCostTour)
+
+if len(filteredAgents) > const.MAXUSERFORTOUR:
+    print("WARNING: The tour has to many users")
