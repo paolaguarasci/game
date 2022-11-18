@@ -119,8 +119,8 @@ Buongiorno Prof,
 ho studiato i meccanismi che mi ha suggerito lei, il vcg e il grooves, e anche tutta una serie di altri meccanismi che mi sembrano interessanti dal punto di vista del problema che devo modellare, ovvero le aste in generale e i routing games.
 
 Dopo averci ragionato su vorrei impostare il problema come un'asta combinatoria a piu' elementi dove i beni in vendita sono le tappe del tour (insieme finito). 
-L'obiettivo e' massimizzare le citta' visitate, i posti in macchina occupati e al contempo minimizzare il costo totale. L'upper bound delle citta' visitate e' la quantita' totale di citta' nella mappa (7 nei test che sto facendo), l'upper bound dei posti in macchina e' dato dalla traccia ed e' k, il lower bound del costo totale e' 0. 
-Ogni citta' ha un prezzo di riserva formulato come il costo minimo del passaggio in quella citta'. Se ci sono due o piu' offerte per quella citta' allora il tour passera' da li. Vince il secondo offerente. (Asta di Vickery)
+L'obiettivo e' massimizzare le citta' visitate, i posti in macchina occupati e al contempo minimizzare il costo totale. L'upper bound delle citta' visitate e' la quantita' totale di citta' nella mappa (7 nei test che sto facendo), l'upper bound dei posti in macchina e' dato dalla traccia ed e' k, il lower bound del costo totale e' 0.
+Ogni citta' ha un prezzo di riserva formulato come il costo minimo del passaggio in quella citta'. Se ci sono due o piu' offerte per quella citta' allora il tour passera' da li. Vince il primo offerente ma paga la seconda offerta. (Asta di Vickery)
 
 Qui mi sono bloccata. Nei modelli che ho visto, per problemi simili, gli agenti selezionano un path mentre io vorrei fargli fare le offerte per ogni citta' disponibile una alla volta, con l'idea che questa scelta corrisponda a dire "Sono l'agente 0. Vorrei tanto poter andare a Londra! Offro x per andare a Londra! Se non posso andare a Londra allora vorrei andare a Roma e offro y per andare a Roma" e via dicendo per ogni tappa possibile del tour. Il player quindi fa delle offerte seguendo il suo ordine privato di preferenze ponendole in OR.
 

@@ -93,3 +93,53 @@ for i in range(0, len(goodsRemained)):
             }
         goodsRemained.remove(good)
 print("auction2\n", auction2, "\n\n")
+
+# Asta al secondo prezzo
+# con beni presi random
+# con controllo sul prezzo di riserva
+# con controllo del numero max di vincitori
+auction3 = dict()
+goodsRemained = deepcopy(goods) 
+# itero sui beni
+for i in range(0, len(goodsRemained)):
+    if len(auction3) < placeInCar:
+        
+        bidders = list()
+        
+        # scelgo random una localita' da mettere all'asta
+        good = goodsRemained[randint(0, len(goodsRemained)-1)]
+
+        # calcolo il prezzo di riserva
+        if len(list(auction3.keys())) == 0:
+            reservePrice = 0
+        elif len(list(auction3.keys())) == 1:
+            actualGoods = list(auction3.keys())
+            actualGoods.append(good)           
+            tour1 = cityNet.findShortestPathBetweenAllSelectedLocations(actualGoods)
+            actualCost = tour1[1] * const.KMFIXEDCOST + const.FIXEDTOURCOST
+            reservePrice = actualCost
+        else:
+            actualGoods = list(auction3.keys())
+            tour1 = cityNet.findShortestPathBetweenAllSelectedLocations(actualGoods)
+            precCost = tour1[1] * const.KMFIXEDCOST + const.FIXEDTOURCOST
+            actualGoods.append(good)
+            tour2 = cityNet.findShortestPathBetweenAllSelectedLocations(actualGoods)
+            actualCost = tour2[1] * const.KMFIXEDCOST + const.FIXEDTOURCOST
+            reservePrice = actualCost - precCost
+
+        # itero sugli offerenti
+        for agent in agents:
+            if agent.city == good and agent.valuation >= reservePrice:
+                bidders.append((agent, agent.valuation))
+        
+        # ordino le offerte in ordine discendente per valutazione
+        bidders.sort(key = lambda i:i[1], reverse = True)
+        
+        # l'asta non viene aggiudicata a nessuno se non ci sono almeno due offerenti per lo stesso bene
+        if len(bidders) > 2:
+            auction3[good] = {
+                "winner": bidders[0][0],
+                "payment": bidders[1][1]
+            }
+        goodsRemained.remove(good)
+print("auction3\n", auction3, "\n\n")

@@ -12,14 +12,20 @@ class Agent():
   valuations = None
   maxPayments = None
 
+  city = None
+  valuation = None
+  payment = None
+  utility = None
+
   def __init__(self, name) -> None:
-    self.name = "Agent " + name
-    self.utilities = self.genRandomUtilitiesSorted(const.PLACES)
-    self.maxPayments = self.genRandomMaxPayments()
-    self.valuations = self.genRandomValuationsSorted()
+    self.name = "Agent" + name
+    # self.utilities = self.genRandomUtilitiesSorted(const.PLACES)
+    # self.valuations = self.genRandomValuationsSorted()
+    self.maxPayments = self.randomizeMaxPayment()
+    self.setValuation(const.PLACES)
+    # self.setUtility()
 
   def genRandomUtilitiesSorted(self, places):
-    # utilities = [randint(-3, 4) for i in range(len(places), 0, -1)]
     utilities = range(0, len(places))
     placesToBeValuate = deepcopy(places)
     userUtilities = {}
@@ -29,6 +35,17 @@ class Agent():
         userUtilities[place] = utility
     return sortDictByValues(userUtilities)
 
+  def setUtility(self, places, payment):
+    #u=v−p
+    self.utility = self.valuation - self.payment
+
+  def setValuation(self, places):
+    self.city = places[randint(0, len(places)-1)]
+    self.valuation = self.maxPayments
+
+  def randomizeMaxPayment(self):
+    return randint(7000, 12000) # TODO Limare questi valori...
+
   def genRandomValuationsSorted(self):
       vals = []
       for util in self.utilities:
@@ -36,12 +53,8 @@ class Agent():
           vals.append((util, val))
       vals.sort(key=lambda a: a[1], reverse = True)
       return vals
-
-  def genRandomMaxPayments(self):
-      # TODO Aggiustare questi valori (il costo massimo e' circa 12000)
-      return randint(7000, 12000)
-  
-  def getFirstValuation(self):
+ 
+  def getFirstValutation(self):
     return self.valuations[0]
   
   def getValutations(self):
