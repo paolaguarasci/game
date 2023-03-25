@@ -35,16 +35,17 @@ class Agent():
         userUtilities[place] = utility
     return sortDictByValues(userUtilities)
 
-  def setUtility(self, places, payment):
+  def setUtility(self):
     #u=v−p
     self.utility = self.valuation - self.payment
+
 
   def setValuation(self, places):
     self.city = places[randint(0, len(places)-1)]
     self.valuation = self.maxPayments
 
   def randomizeMaxPayment(self):
-    return randint(7000, 12000) # TODO Limare questi valori...
+    return randint(0, 12000) # TODO Limare questi valori...
 
   def genRandomValuationsSorted(self):
       vals = []
@@ -64,7 +65,7 @@ class Agent():
     return self.name
 
   def __str__(self):
-    return self.name
+    return self.name + " payment: " + str(self.payment) + " utility: " + str(self.utility) + " valuation: " + str(self.valuation) + " city: " + str(self.city)
 
   def __repr__(self):
     return self.__str__()
