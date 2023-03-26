@@ -1,0 +1,110 @@
+\documentclass{report}
+\usepackage{layout}
+\usepackage[T1]{fontenc} 
+\usepackage[english]{babel}
+\usepackage{hyphenat}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{subcaption}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan
+    }
+
+\usepackage{geometry}
+\setlength{\textheight}{640pt}
+\geometry{
+  a4paper,
+  top=30mm,
+  bottom=30mm,
+}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+\pagenumbering{arabic}
+
+\title{27008537 \textbf{Algorithmic Game Theory}}
+\author{Paola \textbf{Guarasci} (mat. 231847) \\ Francesca \textbf{Murano} (mat. 123456)}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+% \newpage{}
+
+\chapter{Design}
+\section{Background Teorico}
+\paragraph{Bayesian game}
+The Bayesian Game is a game in which players have incomplete information on the other players' strategies and payoffs, but, they have beliefs with known probabilities. It can be modeled as a normal form game with the difference that each player has multiple types with known probabilities (called a common prior beliefs).
+
+Riguardo il grado di conoscenza dei player rispetto alle strategie degli altri player possiamo avere tre configurazioni differenti:
+\begin{itemize}
+  \item \textbf{Ex-ante} the player knows nothing about anyone's actual type.
+  \item \textbf{Interim} the player knows her own type but not the types of the other players.
+  \item \textbf{Ex-post} the player knows all players' types. Making choices at this stage for players is equivalent to making choices in complete information game
+\end{itemize}
+Nel nostro caso specifico si configura un gioco con conoscenza \textbf{interim} perche' ogni player conosce il suo tipo ma non conosce nulla sui tipi degli altri giocatori. In questo caso una strategia diminante e':
+
+\textbf{Interim Dominated Strategy} a strategy for a type such that an alternative strategy for that type provides a greater payoff for that type regardless of all other players' strategies. Interim dominated strategy implies ex-ante dominated strategies (a strategy for a player such that an alternative strategy for that player provides a greater payoff for that player regardless of all other players' strategies). The reverse is not always true.
+
+\paragraph{QUESTO NON MI CONVINCE} Such games are called Bayesian because of the probabilistic analysis inherent in the game. Players have initial beliefs about the type of each player (where a belief is a probability distribution over the possible types for a player) and can update their beliefs according to Bayes' rule as play takes place in the game, i.e.\ the belief a player holds about another player's type might change on the basis of the actions they have played.
+
+Tali giochi sono detti bayesiani a causa dell'analisi probabilistica insita nel gioco. I giocatori hanno delle credenze iniziali sul tipo di ogni giocatore (dove una credenza è una distribuzione di probabilità sui possibili tipi di giocatore) e possono aggiornare le loro credenze secondo la regola di Bayes man mano che il gioco si svolge, cioè la credenza che un giocatore ha sul tipo di un altro giocatore può cambiare sulla base delle azioni che ha giocato.
+
+
+
+
+
+
+% \begin{figure}[ht]
+%   \centering
+%   \subcaptionbox{\label{sfig:testa3}}{\includegraphics[width=1.0cm]{example-image-a}}
+%   \subcaptionbox{\label{sfig:testb3}}{\includegraphics[width=1.0cm]{example-image-b}}
+%   \caption{Figura di esempio4}\label{fig:4}
+%   \par
+% \end{figure}
+
+\section{Setting}
+
+\section{Meccanismo}
+
+\chapter{Implementazione}
+
+\section{Tool utilizzati}
+
+\section{Algoritmo}
+
+
+\newpage{}
+\listoffigures
+% \listoftables
+\end{document}
