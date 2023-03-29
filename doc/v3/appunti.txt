@@ -80,37 +80,3 @@ In questo caso, il meccanismo VCG potrebbe funzionare nel seguente modo:
 
 In questo modo, il meccanismo VCG garantisce l'allocazione efficiente delle risorse e la massimizzazione del benessere totale,
  incoraggiando ogni giocatore a rivelare la propria preferenza in modo onesto.
-
-
- #### ESEMPIO APPLICATIVO
-Ho due giocatori, Alessia vuole andare a Roma con preferenza 5 o a Milano con preferenza 4. 
-Paola vuole andare a Milano con preferenza 2 o a Genova con preferenza 4. Paola ha un budget di 300 euro mentre Alessia di 500 euro. Puoi applicare il VCG?
-
-Si può applicare il meccanismo di VCG (Vickrey-Clarke-Groves) in questo caso per trovare un'allocazione efficiente e corretta dei costi.
-
-Per applicare il meccanismo di VCG, dobbiamo determinare il valore marginale per ogni giocatore. 
-Il valore marginale rappresenta l'utilità che ogni giocatore ottiene dall'ottenere la sua destinazione preferita meno l'utilità che
-otterrebbe dalla seconda scelta.
-
-Il valore marginale di Alessia per Roma è 5-4 = 1, mentre il valore marginale per Milano è 4-5 = -1.
-
-Il valore marginale di Paola per Milano è 4-2 = 2, mentre il valore marginale per Genova è 2-4 = -2.
-
-Quindi, se Alessia va a Roma, il valore marginale totale dei giocatori è 1+2=3, mentre se Alessia va a Milano, 
-il valore marginale totale dei giocatori è -1+2=1. Pertanto, Roma è la destinazione più efficiente per entrambi i giocatori.
-
-Per determinare il prezzo corretto da pagare, calcoliamo il costo che ogni giocatore impone agli altri. Per fare ciò, 
-calcoliamo il valore marginale totale senza il giocatore in questione per ogni destinazione. 
-Ad esempio, il valore marginale totale senza Alessia per Roma sarebbe 2, mentre il valore marginale totale senza Alessia per Milano sarebbe 2.
-
-Quindi, il costo che Alessia impone agli altri giocatori se va a Roma è 2, mentre il costo che impone agli altri giocatori se va a Milano è 0.
-
-Il costo che Paola impone agli altri giocatori se va a Milano è 3, mentre il costo che impone agli altri giocatori se va a Genova è 1.
-
-Il meccanismo di VCG prevede che ogni giocatore paghi il costo che impone agli altri giocatori, indipendentemente dal costo reale che ha sostenuto per la destinazione.
-
-Quindi, se Alessia va a Roma, il prezzo che deve pagare è 2, mentre se Alessia va a Milano, il prezzo che deve pagare è 0.
-
-Se Paola va a Milano, il prezzo che deve pagare è 3, mentre se Paola va a Genova, il prezzo che deve pagare è 1.
-
-In questo modo, applicando il meccanismo di VCG, si ottiene un'allocazione efficiente e corretta dei costi.
