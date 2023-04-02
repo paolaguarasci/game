@@ -8,7 +8,8 @@
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{subcaption}
-
+\usepackage{amssymb}
+\usepackage{amsmath}
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
@@ -76,10 +77,24 @@ Nel nostro caso specifico si configura un gioco con conoscenza \textbf{interim} 
 
 \textbf{Interim Dominated Strategy} a strategy for a type such that an alternative strategy for that type provides a greater payoff for that type regardless of all other players' strategies. Interim dominated strategy implies ex-ante dominated strategies (a strategy for a player such that an alternative strategy for that player provides a greater payoff for that player regardless of all other players' strategies). The reverse is not always true.
 
-\paragraph{QUESTO NON MI CONVINCE} Such games are called Bayesian because of the probabilistic analysis inherent in the game. Players have initial beliefs about the type of each player (where a belief is a probability distribution over the possible types for a player) and can update their beliefs according to Bayes' rule as play takes place in the game, i.e.\ the belief a player holds about another player's type might change on the basis of the actions they have played.
+\paragraph{APPUNTI SPARSI}
+Il tipo di gioco è poi definito da diversi fattori che possono dipendere
+dal tipo di decisione presa dai partecipanti (cooperativo o non cooperativo), dal numero di
+ripetizioni, dal tipo di informazione in possesso dei giocatori (completa o asimmetrica) o dalla
+simultaneità delle azioni (statici o dinamici)
 
-Tali giochi sono detti bayesiani a causa dell'analisi probabilistica insita nel gioco. I giocatori hanno delle credenze iniziali sul tipo di ogni giocatore (dove una credenza è una distribuzione di probabilità sui possibili tipi di giocatore) e possono aggiornare le loro credenze secondo la regola di Bayes man mano che il gioco si svolge, cioè la credenza che un giocatore ha sul tipo di un altro giocatore può cambiare sulla base delle azioni che ha giocato.
 
+\paragraph{Mechanism for a Bayesian Game Setting}
+
+Bayesian Game Setting a tuple $(N, O, \theta , p, u)$
+
+\begin{itemize}
+  \item $N$ a finite set of $n$ agents
+  \item $O$ a set of outcomes
+  \item $\theta = \theta_1 \times \cdots \times \theta_n$ a set of possible joint type vectors
+  \item $p$ a probability distribution on $\theta$
+  \item $ u = (u_1, \dots, u_n) $ where $u_i: O \times \theta \to R  $ utility function for each player $i$
+\end{itemize}
 
 
 
@@ -96,7 +111,17 @@ Tali giochi sono detti bayesiani a causa dell'analisi probabilistica insita nel 
 \section{Setting}
 
 \section{Meccanismo}
+\paragraph{Mechanism for a Bayesian Game Setting}
 
+Bayesian Game Setting a tuple $(N, O, \theta , p, u)$
+
+\begin{itemize}
+  \item $N$ a finite set of $n$ agents potenziali partecipanti al tour (non e' detto che partano tutti)
+  \subitem{} $S = S \subseteq N: \lvert S \rvert = k $ where $k$ is the number of bus seats 
+  \item $O$ a set of outcomes tutti i possibili tour (che rispettano i vincoli)
+  \item $\theta = \theta_1 \times \cdots \times \theta_s$ a set of possible joint type vectors. Prodotto cartesiano delle preferenze dei partecipanti al gioco.
+  \item $ u = (u_1, \dots, u_s) $ where $u_i: O \times \theta \to R  $ utility function for each player $i$ con $u_i$ array delle preferenze sulle localita' per ogni player $i$. E' la funzione che associa tipo e outcome per ogni player, restituendo in output un valore
+\end{itemize}
 \chapter{Implementazione}
 
 \section{Tool utilizzati}

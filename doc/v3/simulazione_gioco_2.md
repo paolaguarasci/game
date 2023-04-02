@@ -1,8 +1,9 @@
-#### TRACCIA
+### TRACCIA
+
 I am organising a tour for 2 people. Departure is from Rome. 
 The destinations are Genoa, Milan.
 Alessia's preferences are Rome = 0, Genoa = 1, Milan = 4.
-Paola's preferences are Rome = 0,Genoa = 5,Milan = 3.
+Paola's preferences are Rome = 0, Genoa = 5,Milan = 3.
 
 The Rome-Milan route costs 350 euros, 
 the Rome-Genoa route costs 300 euros, 
@@ -40,15 +41,17 @@ Total Social Surplus without Alessia:
     Paola's utility: 3
     Cost: 350 euros
     Total Social Surplus: 3 - 350 = -347 euros
+
 Total Social Surplus without Paola:
     Alessia's utility: 4
     Cost: 350 euros
     Total Social Surplus: 4 - 350 = -346 euros
+
 Total Social Surplus with both Alessia and Paola:
     Alessia's utility: 4
     Paola's utility: 3
     Cost: 350 euros x 2 = 700 euros
-Total Social Surplus: 4 + 3 - 700 = -693 euros
+    Total Social Surplus: 4 + 3 - 700 = -693 euros
 
 Therefore, the payment that Alessia would make if she participates in the Rome-Milan tour is:
 
@@ -61,11 +64,8 @@ Payment = -346 - (-693) = 347 euros
 We can repeat this calculation for the other tours as well:
 
 Rome-Genoa:
-    Payment for Alessia: 0
-    Payment for Paola: 0
-Rome-Genoa-Milan:
-    Payment for Alessia: 0
-    Payment for Paola: 0
+    Payment for Alessia: 299 euros
+    Payment for Paola: 295 euros
 
 Now, we need to choose the tour that maximizes the total utility and the social surplus, subject to the budget constraints of each individual.
 
@@ -73,17 +73,15 @@ Since Paola's budget is 300 euros, we can only consider the Rome-Milan and Rome-
 
 For the Rome-Milan tour, Alessia's payment is 346 euros, which leaves her with a budget of 154 euros. Paola's payment is 347 euros, which exceeds her budget of 300 euros. Therefore, the Rome-Milan tour is not feasible for Paola.
 
-For the Rome-Genoa tour, Alessia's payment is 0 euros, which leaves her with a budget of 500 euros. Paola's payment is also 0 euros, which is within her budget of 300 euros. 
+For the Rome-Genoa tour, Alessia's payment is 299 euros, which leaves her with a budget of 201 euros. Paola's payment is 295 euros, which is within her budget of 5 euros. The Rome-Genoa tour is feasible for both individuals.
+The tour that we will choose is the Rome-Genoa tour. 
+The total utility of both individuals is 1 + 5 = 6, and the total cost is 300 euros.
 
-#### Therefore, the Rome-Genoa tour is feasible for both individuals.
-
-Therefore, the tour that we will choose is the Rome-Genoa tour. 
-The total utility of both individuals is 1 + 5 = 6, and the total cost is 300 euros. 
-The total social surplus is 6 - 300 = -294 euros
-
-for the Rome-Genoa tour, both Alessia and Paola would make 0 euro payments if they choose to participate. Therefore, the cost of the tour would be divided equally between Alessia and Paola, resulting in a cost of 150 euros per person.
+In total, the mechanism collects about EUR 600, twice the cost of the tour. In this sense the VCG is not budget balanced. We have to do something with this money. The surplus could be divided among the participants, taking into account the kilometres of their own journey.
 
 ### what do we mean with "social surplus"?
-Social surplus refers to the difference between the total value that a group of individuals derives from a particular activity or transaction and the total cost of that activity or transaction. It represents the overall benefit that is generated for the society as a whole.
 
+utilita' - pagamento
+
+Social surplus refers to the difference between the total value that a group of individuals derives from a particular activity or transaction and the total cost of that activity or transaction. It represents the overall benefit that is generated for the society as a whole.
 In the context of the VCG mechanism for tour selection, the social surplus is calculated as the sum of the total utilities of all individuals who participate in the tour minus the total cost of the tour. The social surplus can be positive or negative, depending on whether the total value of the tour is greater or less than the total cost.
