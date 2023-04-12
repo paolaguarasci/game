@@ -14,37 +14,41 @@ postiInMacchina = const.MAXUSERFORTOUR
 
 for i in range(0,nAgents):
     agents.append(Agent(str(i)))
-
-print(Agent(str(i)))
+    print(agents[i].name, agents[i].utilities)
 
 cityNet = CityNetwork()
 
 def calculateAgentPayment(agent, locations, originalCost):
     totalTourCost = deepcopy(originalCost)
-    originalLocations = deepcopy(locations)
-    chooseLocation = agent[1]
-    originalLocations.remove(chooseLocation)
-    newCycle, newCost = cityNet.findShortestPathBetweenAllSelectedLocations(originalLocations)
-    payment = ((totalTourCost - newCost) * const.KMFIXEDCOST)
-    return (payment, chooseLocation)
+    newAgents = deepcopy(agents)
+    newAgents1 = [item for item in newAgents if item.name != agent[0].name]
+    newLocation = selectLocationByAgentUtility(newAgents1, const.PLACES)
+    newLocation = removeUtilsNull(newLocation)
+    print("newLocation ", newLocation)
+    newLocationsSorted = list(newLocation.keys())
+    
+    print("newLocationsSorted ", newLocationsSorted)
+    newCycle, newCost = cityNet.findShortestPathBetweenAllSelectedLocations(newLocationsSorted)
+    payment = ((totalTourCost - newCost) * const.KMFIXEDCOST) # sarebbe la differenza di km per il costo fisso
+    return (payment, newLocationsSorted)
 
 def calculateTotalPayments(agents, locations, cost):
     res = []
     for agent in agents:
         payment, chooseLocation = calculateAgentPayment(agent, locations, cost)
-        res.append((agent[0].getName(), payment, chooseLocation))
+        res.append((agent[0].name, payment, chooseLocation))
     return res
 
-def selectLocationByAgentValutation(agents, locations):
-    locationsValuations = dict()
+def selectLocationByAgentUtility(agents, locations):
+    locations_utilities = dict()
     for location in locations:
-        locationsValuations[location] = 0;
+        locations_utilities[location] = 0;
 
     for agent in agents:
-        uv = agent.getValutations()
+        uv = agent.utilities
         for v in uv:
-            locationsValuations[v[0]] += v[1]
-    return utils.sortDictByValues(locationsValuations)
+            locations_utilities[v] += uv[v]
+    return utils.sortDictByValues(locations_utilities)
 
 def choiceLocationWithLimit(locations, limits):
     res = []
@@ -77,9 +81,9 @@ def choiceAgentsToTrip(agents, locations, limits):
 def getSpecificValForLocation(agents, location, nval):
     val = []
     for agent in agents:
-        uvals = agent.getValutations()
-        uval = list(filter(lambda x: x[0] == location, uvals))
-        val.append((uval[0][1], agent))
+        uvals = agent.utilities
+        uval = uvals[location]
+        val.append((uval, agent))
     val.sort(key = lambda i:i[0], reverse = True)
     return (val[nval][1], location)
 
@@ -98,15 +102,24 @@ def fixSharePayments(tourLocations, pays):
             res.append(filteredByCity)
     return res
 
+def removeUtilsNull(loc):
+    backupLoc = deepcopy(loc)
+    res = {key:val for key, val in backupLoc.items() if val != 0}
+    return res;
 
-sumOfValuation = selectLocationByAgentValutation(agents, const.PLACES)
-locationsSorted = list(sumOfValuation.keys())
+sumOfUtilities = selectLocationByAgentUtility(agents, const.PLACES)
+locationsSorted = list(sumOfUtilities.keys())
+
+# Non si sta prendendo la citta' di partenza
+# locationsSorted.insert(0, const.STARTPLACE)
+
 locationLimitated, cycle, cost = choiceLocationWithLimit(locationsSorted, const.MAXKMFORTOUR)
 tourCost = cost * const.KMFIXEDCOST + const.FIXEDTOURCOST
-sumOfValuationChoisedCity = list(filter(lambda x: x[0] in locationLimitated, sumOfValuation.items()))
+sumOfValuationChoisedCity = list(filter(lambda x: x[0] in locationLimitated, sumOfUtilities.items()))
+sumOfValuationChoisedCity.append((const.STARTPLACE, 0))
 agentsInCar = choiceAgentsToTrip(agents, sumOfValuationChoisedCity, const.MAXUSERFORTOUR)
 
-print("sumOfValuation", sumOfValuation)
+print("sumOfUtilities", sumOfUtilities)
 print("locationsSorted", locationsSorted)
 print("locationLimitated", locationLimitated)
 print("locationLimitated cycle", cycle)
@@ -115,8 +128,8 @@ print("sumOfValuationChoisedCity ", sumOfValuationChoisedCity)
 print("agentsInCar", agentsInCar)
 
 payments1 = calculateTotalPayments(agentsInCar, locationLimitated, cost)
-print("payments1", payments1)
+print("Pagementi variabili ", payments1)
 payments2 = fixSharePayments(locationLimitated, payments1)
-print("payments2", payments2)
+print("Quote fisse ", payments2)
 
 cityNet.printGraph(cityNet.cityNetwork, cycle)

@@ -1,14 +1,14 @@
 MAXUSERFORTOUR = 2
-MAXKMFORTOUR = 700
+MAXKMFORTOUR = 350
 
-# FIXEDTOURCOST = 1000
+FIXEDTOURCOST = 1000
 
 KMFIXEDCOST = 1.5
 
 STARTPLACE = 'bologna'
 ENDPLACE = STARTPLACE
 
-PLACES = ["bologna", "milano", "torino", "genova"]
+PLACES = ["milano", "torino", "genova"]
           
 DISTANCES = {
     "bologna": {
