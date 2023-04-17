@@ -15,7 +15,7 @@ CostoP = Se Paola non partecipasse (non abbiamo GT), si potrebbe considerare il 
 CP =	(RGMT) - (RGT - GT) = 
    =	500 - (350 - 200) = 500 - 150  = 350
 
-CostoF = Se Francesca non partecipasse, Paola andrebbe solo a Torino ( ma senza francesca non possiamo fare RG, di conseguenza è obbligato a scegliere un altro percorso RMGT).
+CostoF = Se Francesca non partecipasse, Paola vorrebbe raggiungere G e T ( ma senza francesca non possiamo fare RG, di conseguenza è obbligato a scegliere un altro percorso RMGT).
 
 CF = 	RMGT - (RGT - RG) =
 	600 - (350 - 150) = 600 - 200 = 400
