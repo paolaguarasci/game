@@ -1,5 +1,9 @@
-Viaggio considerato = [R G T]
 
+![Graph](graph.png)  \\
+
+
+
+Viaggio considerato = [R G T]
 P = 1 2 ---->  GT
 F = 2 1 ---->  RG
 
@@ -30,9 +34,20 @@ IL VIAGGIO COSTA RGT = 350.
 SOLUZIONE? CALCOLARE NEL PERCORSO IL COSTO ANDATA E RITORNO SU OGNI ARCO (RADDOPPIO I COSTI PER OGNI ARCO)
 
 
-CASO ESTREMO VOLUTO DA PAOLA
+## CASO ESTREMO VOLUTO DA PAOLA
 
 P = 2 0 ---->  RG
 F = 2 0 ---->  RG
 
-PAGANO UGUALE
+## PAGANO UGUALE
+
+CostoP = Se Paola non partecipasse (non abbiamo GT), si potrebbe considerare il percorso RGMTR
+
+CP =	(RGMT) - (RGT - GT) = 
+   =	500 - (350 - 200) = 500 - 150  = 350
+
+
+CostoF = Se Francesca non partecipasse (non abbiamo GT), si potrebbe considerare il percorso RGMTR
+
+CF =	(RGMT) - (RGT - GT) = 
+   =	500 - (350 - 200) = 500 - 150  = 350
