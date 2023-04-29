@@ -6,7 +6,7 @@
 Viaggio considerato = [R G T]
 P = 1 2 ---->  GT
 F = 2 1 ---->  RG
-
+Budget P = Budget F = 500
 Viaggio considerato = [R G T], io devo comunque toccare le città G T, cerco sempre di toccare queste mete perché è il viaggio che abbiamo selezionato. Se viene a mancare un agente(arco), si cerca un viaggio alternativo che faccia comunque ciò.
 
 Per fare quella tratta, devono esserci i due agenti scelti, altrimenti sono obbligat* a sceglierne un'altra (toccando sempre sia G che T).
