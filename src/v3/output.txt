@@ -1,0 +1,51 @@
+Paola {'milano': 2, 'genova': 1, 'torino': 0}
+Francesca {'torino': 2, 'genova': 1, 'milano': 0}
+
+
+Tutti i tour possibili
+ [(('torino', 'genova', 'roma'), 1342), (('torino', 'roma'), 1340), (('milano', 'torino', 'genova', 'roma'), 1330), (('milano', 'torino', 'roma'), 1159), (('genova', 'roma'), 1000), (('milano', 'genova', 'roma'), 988), (('milano', 'roma'), 692)]
+
+
+Tutti i tour possibili che rientrano nel limite dei km max
+ [(('milano', 'torino', 'roma'), 1159), (('genova', 'roma'), 1000), (('milano', 'genova', 'roma'), 988), (('milano', 'roma'), 692)]
+
+
+Tutti i tour possibili con le relative utility
+ [(('milano', 'torino', 'roma'), 4), (('milano', 'genova', 'roma'), 4), (('genova', 'roma'), 2), (('milano', 'roma'), 2)]
+
+
+Tour selezionato (massimizza utlita')
+ (('milano', 'torino', 'roma'), 4)
+
+
+Interesse degli agenti
+
+Paola ['milano']
+Francesca ['torino']
+Giro alternativo ['torino']
+Paola (700, True)
+Giro alternativo ['milano']
+Francesca (700, True)
+
+
+Incasso totale
+1400
+
+
+Surplus
+400
+
+
+Costo per km
+0.35
+
+
+Calcolo sconti e pagamento finale
+
+Paola
+Sconto 238.82
+Pagamento finale 461.17
+
+Francesca
+Sconto 462.46
+Pagamento finale 237.53

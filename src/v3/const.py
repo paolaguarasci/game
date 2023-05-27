@@ -9,7 +9,27 @@ STARTPLACE = 'roma'
 ENDPLACE = STARTPLACE
 
 PLACES = ["milano", "torino", "genova", "roma"]
-          
+COSTI =      {
+    "roma": {
+        "milano":   400,
+        "torino":   450,
+        "genova":   150,
+    },
+    "milano": {
+        "roma":     400,
+        "torino":   150,
+        "genova":   200,
+    },
+    "torino": {
+        "roma":     200,
+        "milano":   150,
+        "genova":   200
+    },
+    "genova": {
+        "roma":     150,
+        "milano":   200,
+        "torino":   200,
+    }}
 DISTANCES = {
     "roma": {
         "milano":   346,

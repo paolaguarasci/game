@@ -10,9 +10,12 @@ class CityNetwork():
     cityNetwork = None
     locations = None
     
-    def __init__(self) -> None:
+    def __init__(self, pesi) -> None:
         self.cityNetwork = nx.Graph()
-        self.cityNetwork.add_weighted_edges_from(self.generateWeightedEdge(const.DISTANCES))
+        if not pesi:
+            self.cityNetwork.add_weighted_edges_from(self.generateWeightedEdge(const.DISTANCES))
+        else:
+            self.cityNetwork.add_weighted_edges_from(self.generateWeightedEdge(pesi))
     
     
     def generateWeightedEdge(self, dist):
@@ -39,7 +42,7 @@ class CityNetwork():
         }
         nx.draw_networkx(graph, pos, **options)
         label_options = {"ec": "k", "fc": "white", "alpha": 0.7}
-        nx.draw_networkx_labels(graph, pos, bbox=label_options);
+        nx.draw_networkx_labels(graph, pos, bbox=label_options)
         nx.draw_networkx_edge_labels(graph, pos, edge_labels=nx.get_edge_attributes(
             graph, "weight"), font_size=12, rotate=True)
         ax = plt.gca()

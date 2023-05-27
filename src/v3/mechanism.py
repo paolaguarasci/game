@@ -19,7 +19,8 @@ for i in range(0,nAgents):
     agents.append(Agent(agentsName[i]))
     print(agents[i].name, agents[i].utilities)
 
-cityNet = CityNetwork()
+cityNetKm = CityNetwork(const.DISTANCES)
+cityNetMoney = CityNetwork(const.COSTI)
 
 def powerset(iterable):
     s = list(iterable)
@@ -36,7 +37,7 @@ def calculateAllTourWithCost(locations):
     filterdWithCost = []
     
     for tour in filtered2:
-        cycle, cost = cityNet.findShortestPathBetweenAllSelectedLocations(tour)
+        cycle, cost = cityNetKm.findShortestPathBetweenAllSelectedLocations(tour)
         filterdWithCost.append((tour, cost))
     
     return sorted(filterdWithCost, key=lambda tup: tup[1], reverse=True)
@@ -57,22 +58,42 @@ def calculateUtilityForAllTour(tours, agents):
         res.append((tour[0], tourUtility))
     return sorted(res, key=lambda tup: tup[1], reverse=True)
 
+# Rimozione arco relativo all'agente
+def removeAgentArch(allArcs, arcsToRemove):
+    if len(arcsToRemove) == 2:
+        allArcs[arcsToRemove[0]][arcsToRemove[1]] = 10000000
+        allArcs[arcsToRemove[1]][arcsToRemove[0]] = 10000000
+    return allArcs
+
 # Calcolo del costo del tour per ogni agente
 def calculateAgentPayment(selectedTour, agent):
     agentInterest = agent.getCityMaxUtility(selectedTour)
     # TODO Risolvere questo problema in qualche modo!!!
     # Attenzione in 
-    # 'cityNet.findShortestPathBetweenAllSelectedLocations(agentInterest)'
+    # 'cityNetMoney.findShortestPathBetweenAllSelectedLocations(agentInterest)'
     # la lista di location agentInterest deve avere lunghezza almeno pari a 2
-    if len(agentInterest) > 1:
-        _, costoCompleto = cityNet.findShortestPathBetweenAllSelectedLocations(selectedTour)
-        _, costoSenzaAgente = cityNet.findShortestPathBetweenAllSelectedLocations(selectedTour)
-        _, costoPerCuiPartecipa = cityNet.findShortestPathBetweenAllSelectedLocations(agentInterest)
-        agent.kmTrattaInteresse = costoPerCuiPartecipa
-        costo = costoSenzaAgente - costoPerCuiPartecipa
+    
+    cityAlternative = []
+    
+    for city in selectedTour:
+        if city not in agentInterest and city != const.STARTPLACE:
+            cityAlternative.append(city)
+            
+    print("Giro alternativo", cityAlternative)
+    agentInterest.append(const.STARTPLACE)
+    cityAlternative.append(const.STARTPLACE)
+    if len(cityAlternative) > 1 and len(agentInterest) > 1:
+        _, costoPercorsoAlternativo = cityNetMoney.findShortestPathBetweenAllSelectedLocations(cityAlternative)
+        _, costoTourScelto = cityNetMoney.findShortestPathBetweenAllSelectedLocations(selectedTour)
+        _, costoTrattaInteresse = cityNetMoney.findShortestPathBetweenAllSelectedLocations(agentInterest)
+        
+        _, distanzaKmTrattaInteresse = cityNetKm.findShortestPathBetweenAllSelectedLocations(agentInterest)
+        agent.kmTrattaInteresse = distanzaKmTrattaInteresse
+        
+        costo = costoPercorsoAlternativo - (costoTourScelto - costoTrattaInteresse)
         # TODO decidere cosa fare se non supera il budget
         return (costo, agent.budget < costo)
-    return (0, False)
+    return (0, True)
 
 # Calcolo l'incasso totale del meccanismo come somma dei pagamenti dei singoli agenti
 def calcoloIncassoTotale(selectedTour, agents):
@@ -92,8 +113,12 @@ def calcoloScontoEPagamentoFinale(agent, costoAlKm):
         print("Pagamento finale", agent.pagamentoFinale)
     return agent.pagamentoFinale
 
-def getTourCost(selectedTour):
-    _, costo = cityNet.findShortestPathBetweenAllSelectedLocations(selectedTour)
+def getTourCostMoney(selectedTour):
+    _, costo = cityNetMoney.findShortestPathBetweenAllSelectedLocations(selectedTour)
+    return costo
+
+def getTourCostKm(selectedTour):
+    _, costo = cityNetKm.findShortestPathBetweenAllSelectedLocations(selectedTour)
     return costo
 
 allTour = calculateAllTourWithCost(const.PLACES)
@@ -120,11 +145,12 @@ if DEBUG:
 incassoTotale = calcoloIncassoTotale(selectedTour, agents)
 if DEBUG: print("\n\nIncasso totale\n", incassoTotale)
 
-costoRealeTour = getTourCost(selectedTour[0]) # in termini di km
-surplus = incassoTotale - costoRealeTour # <- qui non va bene questo valore, e' in km, non possiamo sottrarli ai soldi!
+costoRealeTourMoney = getTourCostMoney(selectedTour[0])
+surplus = incassoTotale - costoRealeTourMoney
 if DEBUG: print("\n\nSurpluss\n", surplus)
 
-costoAlKm = surplus / costoRealeTour
+costoRealeTourKm = getTourCostKm(selectedTour[0])
+costoAlKm = surplus / costoRealeTourKm
 if DEBUG: print("\n\nCosto per km\n{:.2f}".format(costoAlKm))
 
 
