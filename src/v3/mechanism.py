@@ -6,130 +6,131 @@ import utils
 from agent import Agent
 from graph import CityNetwork
 
-warnings.filterwarnings("ignore", message="Gtk-Message")
+from itertools import chain, combinations
 
-nAgents = 3
+warnings.filterwarnings("ignore", message="Gtk-Message")
+DEBUG=True
+nAgents = 2 # Paola e Francesca
+agentsName = ["Paola", "Francesca"]
 agents = []
 postiInMacchina = const.MAXUSERFORTOUR
 
 for i in range(0,nAgents):
-    agents.append(Agent(str(i)))
+    agents.append(Agent(agentsName[i]))
     print(agents[i].name, agents[i].utilities)
 
 cityNet = CityNetwork()
 
-def calculateAgentPayment(agent, locations, originalCost):
-    totalTourCost = deepcopy(originalCost)
-    newAgents = deepcopy(agents)
-    newAgents1 = [item for item in newAgents if item.name != agent[0].name]
-    newLocation = selectLocationByAgentUtility(newAgents1, const.PLACES)
-    newLocation = removeUtilsNull(newLocation)
-    print("newLocation ", newLocation)
-    newLocationsSorted = list(newLocation.keys())
+def powerset(iterable):
+    s = list(iterable)
+    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
+
+# Calcolo di ogni possibile tour e del costo relativo
+def calculateAllTourWithCost(locations):
+    powerSetLocations = powerset(locations)
+    # rimozione tour che non hanno la citta' i partenza tra le citta' contemplate
+    filtered1 = filter(lambda x: const.STARTPLACE in x, powerSetLocations)
+    # rimozione tour di dimensione 0 e 1
+    filtered2 = filter(lambda x: len(x) > 1, filtered1)
     
-    print("newLocationsSorted ", newLocationsSorted)
-    newCycle, newCost = cityNet.findShortestPathBetweenAllSelectedLocations(newLocationsSorted)
-    payment = ((totalTourCost - newCost) * const.KMFIXEDCOST) # sarebbe la differenza di km per il costo fisso
-    return (payment, newLocationsSorted)
+    filterdWithCost = []
+    
+    for tour in filtered2:
+        cycle, cost = cityNet.findShortestPathBetweenAllSelectedLocations(tour)
+        filterdWithCost.append((tour, cost))
+    
+    return sorted(filterdWithCost, key=lambda tup: tup[1], reverse=True)
 
-def calculateTotalPayments(agents, locations, cost):
+# Rimozione dei tour che superano il limite kilometrico
+def removeTourOverKMLimit(location,limits):
+    return list(filter(lambda tup: tup[1] < limits, location))
+
+# Calcolo delle utilita' di ogni tour
+def calculateUtilityForAllTour(tours, agents):
     res = []
+    for tour in tours:
+        tourUtility = 0
+        for agent in agents:
+            for city in tour[0]:
+                if city != const.STARTPLACE:
+                    tourUtility += agent.getUtility(city)
+        res.append((tour[0], tourUtility))
+    return sorted(res, key=lambda tup: tup[1], reverse=True)
+
+# Calcolo del costo del tour per ogni agente
+def calculateAgentPayment(selectedTour, agent):
+    agentInterest = agent.getCityMaxUtility(selectedTour)
+    # TODO Risolvere questo problema in qualche modo!!!
+    # Attenzione in 
+    # 'cityNet.findShortestPathBetweenAllSelectedLocations(agentInterest)'
+    # la lista di location agentInterest deve avere lunghezza almeno pari a 2
+    if len(agentInterest) > 1:
+        _, costoCompleto = cityNet.findShortestPathBetweenAllSelectedLocations(selectedTour)
+        _, costoSenzaAgente = cityNet.findShortestPathBetweenAllSelectedLocations(selectedTour)
+        _, costoPerCuiPartecipa = cityNet.findShortestPathBetweenAllSelectedLocations(agentInterest)
+        agent.kmTrattaInteresse = costoPerCuiPartecipa
+        costo = costoSenzaAgente - costoPerCuiPartecipa
+        # TODO decidere cosa fare se non supera il budget
+        return (costo, agent.budget < costo)
+    return (0, False)
+
+# Calcolo l'incasso totale del meccanismo come somma dei pagamenti dei singoli agenti
+def calcoloIncassoTotale(selectedTour, agents):
+    costoTotale = 0
     for agent in agents:
-        payment, chooseLocation = calculateAgentPayment(agent, locations, cost)
-        res.append((agent[0].name, payment, chooseLocation))
-    return res
+        pagamentoAgente = calculateAgentPayment(selectedTour[0], agent)
+        agent.pagamento = pagamentoAgente[0]
+        costoTotale += pagamentoAgente[0]
+        print(agent.name, pagamentoAgente)
+    return costoTotale
 
-def selectLocationByAgentUtility(agents, locations):
-    locations_utilities = dict()
-    for location in locations:
-        locations_utilities[location] = 0;
+def calcoloScontoEPagamentoFinale(agent, costoAlKm):
+    if agent.kmTrattaInteresse and agent.kmTrattaInteresse > 0:
+        agent.sconto = costoAlKm * agent.kmTrattaInteresse
+        print("Sconto", agent.sconto)
+        agent.pagamentoFinale = agent.pagamento - agent.sconto
+        print("Pagamento finale", agent.pagamentoFinale)
+    return agent.pagamentoFinale
 
+def getTourCost(selectedTour):
+    _, costo = cityNet.findShortestPathBetweenAllSelectedLocations(selectedTour)
+    return costo
+
+allTour = calculateAllTourWithCost(const.PLACES)
+if DEBUG: print("\n\nTutti i tour possibili\n", allTour)
+
+allTourCapped = removeTourOverKMLimit(allTour, const.MAXKMFORTOUR)
+if DEBUG: print("\n\nTutti i tour possibili che rientrano nel limite dei km max\n", allTourCapped)
+
+allTourCappedWithUtility = calculateUtilityForAllTour(allTourCapped, agents)
+if DEBUG: print("\n\nTutti i tour possibili con le relative utility\n", allTourCappedWithUtility)
+
+# possiamo prendere il primo elemento della lista perche' la funzione di 
+# calcolo 'calculateUtilityForAllTour' restituisce una lista ordinata per utilita'
+# in ordine inverso. Il primo elemento della lista quindi massimiza l'utilita'
+selectedTour = allTourCappedWithUtility[0]
+if DEBUG: print("\n\nTour selezionato (massimizza utlita')\n", selectedTour)
+
+# citta' di interesse degli agenti all'interno del tour selezionato:
+if DEBUG: 
+    print("\n\nInteresse degli agenti")
     for agent in agents:
-        uv = agent.utilities
-        for v in uv:
-            locations_utilities[v] += uv[v]
-    return utils.sortDictByValues(locations_utilities)
+        print(agent.name, agent.getCityMaxUtility(selectedTour[0]))
 
-def choiceLocationWithLimit(locations, limits):
-    res = []
-    res.append(locations[0])
-    locations.pop(0)
-    tripCost = None
-    tripCycle = None
-    for location in locations:
-        res.append(location)
-        cycle, cost = cityNet.findShortestPathBetweenAllSelectedLocations(res)
-        if cost > limits:
-            res.remove(location)
-            tripCycle, tripCost = cityNet.findShortestPathBetweenAllSelectedLocations(res)
-            break
-    return (res, tripCycle, tripCost) 
+incassoTotale = calcoloIncassoTotale(selectedTour, agents)
+if DEBUG: print("\n\nIncasso totale\n", incassoTotale)
 
-def choiceAgentsToTrip(agents, locations, limits):
-    res = []
-    k = 0
-    x = 0
-    for i in range(0, limits):
-        if len(res) > limits:
-            break
-        res.append(getSpecificValForLocation(agents, locations[k % len(locations)][0], x))
-        if (len(res) % len(locations) == 0):
-           x += 1
-        k += 1
-    return res
+costoRealeTour = getTourCost(selectedTour[0]) # in termini di km
+surplus = incassoTotale - costoRealeTour # <- qui non va bene questo valore, e' in km, non possiamo sottrarli ai soldi!
+if DEBUG: print("\n\nSurpluss\n", surplus)
 
-def getSpecificValForLocation(agents, location, nval):
-    val = []
+costoAlKm = surplus / costoRealeTour
+if DEBUG: print("\n\nCosto per km\n{:.2f}".format(costoAlKm))
+
+
+if DEBUG: 
+    print("\n\nCalcolo sconti e pagamento finale")
     for agent in agents:
-        uvals = agent.utilities
-        uval = uvals[location]
-        val.append((uval, agent))
-    val.sort(key = lambda i:i[0], reverse = True)
-    return (val[nval][1], location)
+        print(agent.name, calcoloScontoEPagamentoFinale(agent, costoAlKm))
 
-def fixSharePayments(tourLocations, pays):
-    payments = deepcopy(pays)
-    payments = sorted(payments, key=lambda x: x[2])
-    res = []
-    for city in tourLocations:
-        filteredByCity = list(filter(lambda x: x[2] == city, payments))
-        if len(filteredByCity) > 1:
-             for x in filteredByCity:
-                xl = list(x)
-                xl[1] /= len(filteredByCity)
-                res.append(tuple(xl))
-        else:
-            res.append(filteredByCity)
-    return res
-
-def removeUtilsNull(loc):
-    backupLoc = deepcopy(loc)
-    res = {key:val for key, val in backupLoc.items() if val != 0}
-    return res;
-
-sumOfUtilities = selectLocationByAgentUtility(agents, const.PLACES)
-locationsSorted = list(sumOfUtilities.keys())
-
-# Non si sta prendendo la citta' di partenza
-# locationsSorted.insert(0, const.STARTPLACE)
-
-locationLimitated, cycle, cost = choiceLocationWithLimit(locationsSorted, const.MAXKMFORTOUR)
-tourCost = cost * const.KMFIXEDCOST + const.FIXEDTOURCOST
-sumOfValuationChoisedCity = list(filter(lambda x: x[0] in locationLimitated, sumOfUtilities.items()))
-sumOfValuationChoisedCity.append((const.STARTPLACE, 0))
-agentsInCar = choiceAgentsToTrip(agents, sumOfValuationChoisedCity, const.MAXUSERFORTOUR)
-
-print("sumOfUtilities", sumOfUtilities)
-print("locationsSorted", locationsSorted)
-print("locationLimitated", locationLimitated)
-print("locationLimitated cycle", cycle)
-print("locationLimitated cost", cost)
-print("sumOfValuationChoisedCity ", sumOfValuationChoisedCity)
-print("agentsInCar", agentsInCar)
-
-payments1 = calculateTotalPayments(agentsInCar, locationLimitated, cost)
-print("Pagementi variabili ", payments1)
-payments2 = fixSharePayments(locationLimitated, payments1)
-print("Quote fisse ", payments2)
-
-cityNet.printGraph(cityNet.cityNetwork, cycle)
+# cityNet.printGraph(cityNet.cityNetwork, cycle)
