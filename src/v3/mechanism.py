@@ -67,19 +67,13 @@ def removeAgentArch(allArcs, arcsToRemove):
 
 # Calcolo del costo del tour per ogni agente
 def calculateAgentPayment(selectedTour, agent):
-    agentInterest = agent.getCityMaxUtility(selectedTour)
-    # TODO Risolvere questo problema in qualche modo!!!
-    # Attenzione in 
-    # 'cityNetMoney.findShortestPathBetweenAllSelectedLocations(agentInterest)'
-    # la lista di location agentInterest deve avere lunghezza almeno pari a 2
-    
+    agentInterest = agent.getCityWithUtility(selectedTour)  
     cityAlternative = []
     
     for city in selectedTour:
         if city not in agentInterest and city != const.STARTPLACE:
             cityAlternative.append(city)
-            
-    print("Giro alternativo", cityAlternative)
+
     agentInterest.append(const.STARTPLACE)
     cityAlternative.append(const.STARTPLACE)
     if len(cityAlternative) > 1 and len(agentInterest) > 1:
@@ -121,6 +115,7 @@ def getTourCostKm(selectedTour):
     _, costo = cityNetKm.findShortestPathBetweenAllSelectedLocations(selectedTour)
     return costo
 
+
 allTour = calculateAllTourWithCost(const.PLACES)
 if DEBUG: print("\n\nTutti i tour possibili\n", allTour)
 
@@ -140,7 +135,7 @@ if DEBUG: print("\n\nTour selezionato (massimizza utlita')\n", selectedTour)
 if DEBUG: 
     print("\n\nInteresse degli agenti")
     for agent in agents:
-        print(agent.name, agent.getCityMaxUtility(selectedTour[0]))
+        print(agent.name, agent.getCityWithUtility(selectedTour[0]))
 
 incassoTotale = calcoloIncassoTotale(selectedTour, agents)
 if DEBUG: print("\n\nIncasso totale\n", incassoTotale)
@@ -157,6 +152,7 @@ if DEBUG: print("\n\nCosto per km\n{:.2f}".format(costoAlKm))
 if DEBUG: 
     print("\n\nCalcolo sconti e pagamento finale")
     for agent in agents:
-        print(agent.name, calcoloScontoEPagamentoFinale(agent, costoAlKm))
+        print(agent.name)
+        calcoloScontoEPagamentoFinale(agent, costoAlKm)
 
 # cityNet.printGraph(cityNet.cityNetwork, cycle)

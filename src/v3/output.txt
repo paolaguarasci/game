@@ -1,5 +1,5 @@
-Paola {'milano': 2, 'genova': 1, 'torino': 0}
-Francesca {'torino': 2, 'genova': 1, 'milano': 0}
+Paola {'torino': 2, 'genova': 1, 'milano': 0}
+Francesca {'milano': 2, 'genova': 1, 'torino': 0}
 
 
 Tutti i tour possibili
@@ -19,21 +19,20 @@ Tour selezionato (massimizza utlita')
 
 
 Interesse degli agenti
-
-Paola ['milano']
-Francesca ['torino']
-Giro alternativo ['torino']
-Paola (700, True)
+Paola ['torino']
+Francesca ['milano']
 Giro alternativo ['milano']
+Paola (700, True)
+Giro alternativo ['torino']
 Francesca (700, True)
 
 
 Incasso totale
-1400
+ 1400
 
 
-Surplus
-400
+Surpluss
+ 400
 
 
 Costo per km
@@ -41,11 +40,9 @@ Costo per km
 
 
 Calcolo sconti e pagamento finale
-
 Paola
-Sconto 238.82
-Pagamento finale 461.17
-
-Francesca
 Sconto 462.46
 Pagamento finale 237.53
+Francesca
+Sconto 238.82
+Pagamento finale 461.17
