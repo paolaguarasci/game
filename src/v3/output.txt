@@ -21,8 +21,10 @@ Tour selezionato (massimizza utlita')
 Interesse degli agenti
 Paola ['torino']
 Francesca ['milano']
+
 Giro alternativo ['milano']
 Paola (700, True)
+
 Giro alternativo ['torino']
 Francesca (700, True)
 

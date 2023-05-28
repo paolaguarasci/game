@@ -37,13 +37,13 @@ class Agent():
   def getUtility(self, city):
     return self.utilities[city]
   
-  # Dato un tour restituisce una lista di citta' di interesse per l'agente 
+  # Dato un tour restituisce una lista degli archi con citta' di interesse per l'agente 
   # (cioe' con utilita' maggiore di 0)
   def getCityMaxUtility(self, tour):
     res = []
-    for city in tour:
-      if (city != const.STARTPLACE and self.utilities[city] > 0):
-        res.append(city)
+    for idx, city in enumerate(tour):
+      if (tour[idx] != const.STARTPLACE and self.utilities[tour[idx]] > 0):
+        res.append((tour[idx-1], tour[idx]))
     return res
   
   def __str__(self):

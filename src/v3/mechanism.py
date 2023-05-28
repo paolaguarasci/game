@@ -75,15 +75,14 @@ def calculateAgentPayment(selectedTour, agent):
             cityAlternative.append(city)
 
     agentInterest.append(const.STARTPLACE)
+    cityAlternative.insert(0, const.STARTPLACE)
     cityAlternative.append(const.STARTPLACE)
     if len(cityAlternative) > 1 and len(agentInterest) > 1:
-        _, costoPercorsoAlternativo = cityNetMoney.findShortestPathBetweenAllSelectedLocations(cityAlternative)
+        _, costoPercorsoAlternativo = cityNetMoney.findAlternative(cityAlternative)
         _, costoTourScelto = cityNetMoney.findShortestPathBetweenAllSelectedLocations(selectedTour)
-        _, costoTrattaInteresse = cityNetMoney.findShortestPathBetweenAllSelectedLocations(agentInterest)
-        
-        _, distanzaKmTrattaInteresse = cityNetKm.findShortestPathBetweenAllSelectedLocations(agentInterest)
+        _, costoTrattaInteresse = cityNetMoney.findAlternativeAB(selectedTour, agentInterest[0][0], agentInterest[0][1])
+        _, distanzaKmTrattaInteresse = cityNetKm.findAlternativeAB(selectedTour, agentInterest[0][0], agentInterest[0][1])
         agent.kmTrattaInteresse = distanzaKmTrattaInteresse
-        
         costo = costoPercorsoAlternativo - (costoTourScelto - costoTrattaInteresse)
         # TODO decidere cosa fare se non supera il budget
         return (costo, agent.budget < costo)
