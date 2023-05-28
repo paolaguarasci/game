@@ -67,7 +67,7 @@ def removeAgentArch(allArcs, arcsToRemove):
 
 # Calcolo del costo del tour per ogni agente
 def calculateAgentPayment(selectedTour, agent):
-    agentInterest = agent.getCityWithUtility(selectedTour)  
+    agentInterest = agent.getCityMaxUtility(selectedTour)  
     cityAlternative = []
     
     for city in selectedTour:
@@ -135,7 +135,7 @@ if DEBUG: print("\n\nTour selezionato (massimizza utlita')\n", selectedTour)
 if DEBUG: 
     print("\n\nInteresse degli agenti")
     for agent in agents:
-        print(agent.name, agent.getCityWithUtility(selectedTour[0]))
+        print(agent.name, agent.getCityMaxUtility(selectedTour[0]))
 
 incassoTotale = calcoloIncassoTotale(selectedTour, agents)
 if DEBUG: print("\n\nIncasso totale\n", incassoTotale)
