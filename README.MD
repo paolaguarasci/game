@@ -15,6 +15,13 @@ https://www.overleaf.com/project/62e6d873cd73a88f96d2ada5
 - Il veicolo può ospitare un numero fisso, diciamo k, di utenti; inoltre, abbiamo un limite sulla lunghezza massima (espressa in km) del tour.
 - L'esecuzione del tour comporta due costi: un costo proporzionale alla lunghezza del tour e un costo fisso.
 
+
+Dato un insieme di utenti, ognuno di essi propone una lista di utilita' per un determinato luogo.
+
+Il problema assegnatoci chiede la costruzione di un tour tra luogi predefiniti (o un loro sottoinsieme) ed una selezione di utenti, tra tutti quelli che partecipano al gioco, che intraprendera' questo viaggio. 
+I vincoli dati riguardano la lunghezza massima in termini di km del percorso scelto e la quantita' massima di partecipanti al tour. 
+Il meccanismo deve inoltre stabilire i pagamenti per ogni partecipante, che in ogni caso non possono superare i rispettivi budget.
+
 ### Obiettivo:
 
 - Il sistema deve:

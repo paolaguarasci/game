@@ -84,7 +84,6 @@ def calculateAgentPayment(selectedTour, agent):
         _, distanzaKmTrattaInteresse = cityNetKm.findAlternativeAB(selectedTour, agentInterest[0][0], agentInterest[0][1])
         agent.kmTrattaInteresse = distanzaKmTrattaInteresse
         costo = costoPercorsoAlternativo - (costoTourScelto - costoTrattaInteresse)
-        # TODO decidere cosa fare se non supera il budget
         return (costo, agent.budget < costo)
     return (0, True)
 
@@ -154,4 +153,4 @@ if DEBUG:
         print(agent.name)
         calcoloScontoEPagamentoFinale(agent, costoAlKm)
 
-# cityNet.printGraph(cityNet.cityNetwork, cycle)
+# cityNetMoney.printGraph(cityNetMoney.cityNetwork, selectedTour)
